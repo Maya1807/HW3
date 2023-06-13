@@ -1,9 +1,10 @@
-import java.util.EmptyStackException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.Objects;
+import java.lang.reflect.Method;
 
 public class ArrayStack <E extends Cloneable> implements Stack<E> {
-    private Object[] arr;
+    private Cloneable[] arr;
     private int maxCapacity;
     private int top;
 
@@ -12,7 +13,7 @@ public class ArrayStack <E extends Cloneable> implements Stack<E> {
             throw new NegativeCapacityException();
         }
         this.maxCapacity = maxCapacity;
-        arr = new Object[maxCapacity];
+        arr = new Cloneable[maxCapacity];
         top = -1;
     }
     @Override
@@ -35,6 +36,7 @@ public class ArrayStack <E extends Cloneable> implements Stack<E> {
         else{
             E temp = (E) arr[top];
             arr[top] = null;
+            top--;
             return temp;
         }
     }
@@ -60,31 +62,45 @@ public class ArrayStack <E extends Cloneable> implements Stack<E> {
     }
 
     @Override
-    public ArrayStack<E> clone(){
-    try {
-        ArrayStack<E> copyStack = (ArrayStack<E>) super.clone();
-        copyStack.arr = new Object[maxCapacity];
-        for(int i = 0; i <= top; i++) {
-            E clonedElement = (E) ((Cloneable) arr[i]).clone();
-            copyStack.arr[i] = clonedElement;
+    public ArrayStack<E> clone() {
+        ArrayStack<E> copyStack;
+        try {
+            copyStack = (ArrayStack<E>) super.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            return null;
+        }
 
+        copyStack.arr = new Cloneable [this.maxCapacity];
+        for (int i = 0; i < this.size(); i++) {
+            try {
+                Method cloneMethod = this.arr[i].getClass().getMethod("clone");
+                copyStack.arr[i] = (Cloneable) cloneMethod.invoke(this.arr[i]);
+            }
+            catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                return null;
+            }
         }
         return copyStack;
-        
     }
-    catch (CloneNotSupportedException e){
-        return null;
-    }
-    }
-    private E get(int index){
-        return (E)arr[index];
-    }
-
-
-
 
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new StackIterator();
+    }
+
+    private class StackIterator implements Iterator<E> {
+        private int i = size() - 1;
+        @Override
+        public boolean hasNext() {
+            return i >= 0;
+        }
+
+        @Override
+        public E next() {
+            E nextElement = (E) arr[i];
+            i--;
+            return nextElement;
+        }
     }
 }

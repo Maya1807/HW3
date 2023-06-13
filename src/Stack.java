@@ -1,3 +1,5 @@
+import java.util.Iterator;
+
 public interface Stack<E extends Cloneable> extends Iterable<E>, Cloneable {
     void push(E element);
     E pop();
@@ -7,4 +9,4 @@ public interface Stack<E extends Cloneable> extends Iterable<E>, Cloneable {
     Stack<E> clone();
 }
 
-
+ 
