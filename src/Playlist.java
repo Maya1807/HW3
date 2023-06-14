@@ -14,7 +14,6 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
     }
     public Playlist(List<Song> songs) {
         this.songs = songs;
-        this.order = ScanningOrder.ADDING;
     }
 
 
@@ -23,15 +22,15 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
         if (songs.isEmpty()) {
             return "[]";
         }
-        String playlistString = "[";
+        StringBuilder playlistString = new StringBuilder("[");
 
         for(int i = 0; i < songs.size() - 1; i++)
-            playlistString += "(" + songs.get(i).toString() + "), ";
+            playlistString.append("(").append(songs.get(i).toString()).append("), ");
 
 
-        playlistString += "(" + songs.get(songs.size() - 1).toString() + ")]";
+        playlistString.append("(").append(songs.get(songs.size() - 1).toString()).append(")]");
 
-        return playlistString;
+        return playlistString.toString();
     }
 
     public void addSong(Song song){
@@ -52,7 +51,7 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
         catch (CloneNotSupportedException e){
             return null;
         }
-        copyPlaylist.songs = new ArrayList<Song>();
+        copyPlaylist.songs = new ArrayList<>();
 
         for(int i = 0; i < songs.size(); i++)
             copyPlaylist.songs.add(i, songs.get(i).clone());
@@ -68,6 +67,10 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
         }
         Playlist otherPlayList = (Playlist) other;
 
+        if (this.songs.size() != otherPlayList.songs.size()) {
+            return false;
+        }
+
         for (int i=0; i<this.songs.size(); i++){
             if (!(otherPlayList.songs.contains(this.songs.get(i)))){
                 return false;
@@ -79,8 +82,8 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
     @Override
     public int hashCode() {
         int res = 0;
-        for(int i = 0; i < songs.size(); i++)
-            res += songs.get(i).hashCode();
+        for (Song song : songs)
+            res += song.hashCode();
 
         return res;
     }
@@ -148,9 +151,9 @@ public class Playlist implements Cloneable, Iterable<Song>, FilteredSongIterable
 
         @Override
         public Song next() {
-                Song temp = sortedSongs.get(i);
-                i++;
-                return temp;
+            Song temp = sortedSongs.get(i);
+            i++;
+            return temp;
         }
     }
 
