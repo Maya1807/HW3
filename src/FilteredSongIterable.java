@@ -1,7 +1,7 @@
 public interface FilteredSongIterable extends Iterable<Song> {
-    public void filterArtist(String artist);
-    public void filterGenre(Song.Genre genre);
-    public void filterDuration(int duration);
+    void filterArtist(String artist);
+    void filterGenre(Song.Genre genre);
+    void filterDuration(int duration);
 
 
 }

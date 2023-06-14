@@ -1,7 +1,4 @@
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 class MyCloneable implements Cloneable {
     private int num;
@@ -36,7 +33,7 @@ class MyCloneable implements Cloneable {
 
 public class Main {
     public static void main(String[] args) {
-//        testPartA();
+        testPartA();
         testPartB();
     }
 
@@ -271,6 +268,9 @@ public class Main {
         checkScans(playlist3, artists, durations);
 
         System.out.println("\nTesting of part B is over!");
+
+        Song mayaSong = new Song("Mamma Mia", "ABBA", Song.Genre.POP, 213);
+        System.out.println(mayaSong.getDuration());
     }
 
     /**
