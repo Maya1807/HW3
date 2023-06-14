@@ -268,9 +268,6 @@ public class Main {
         checkScans(playlist3, artists, durations);
 
         System.out.println("\nTesting of part B is over!");
-
-        Song mayaSong = new Song("Mamma Mia", "ABBA", Song.Genre.POP, 213);
-        System.out.println(mayaSong.getDuration());
     }
 
     /**
